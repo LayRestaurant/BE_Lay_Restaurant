@@ -16,19 +16,45 @@ class AuthenticatedSessionController extends Controller
      */
 
 
-     public function store(LoginRequest $request)
-     {
-         $request->authenticate();
-         $request->session()->regenerate();
+    //  public function store(LoginRequest $request)
+    //  {
+    //      $request->authenticate();
+    //      $request->session()->regenerate();
 
-         $email = $request->email;
-         $user = User::where('email', $email)->first(); // Assuming email is unique
+    //      $user = $request->user(); // Lấy thông tin người dùng đã đăng nhập
 
-         return response()->json([
-            'user' => $user,
-            'message' => 'Login successful'
+    //      return response()->json([
+    //          'user' => $user,
+    //          'message' => 'Login successful'
+    //      ]);
+    //  }
+
+
+    public function store(Request $request)
+    {
+        // Kiểm tra xác thực đăng nhập
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            // Nếu thông tin đăng nhập không chính xác, trả về một response lỗi
+            return response()->json([
+                'message' => 'Thông tin đăng nhập không chính xác.'
+            ], 401);
+        }
+        $email = $request->get('email');
+        $user = User::where('email', $email)->first();
+        Auth::login($user);
+        $roleName = $user->role->name;
+        // Trả về response thành công nếu đăng nhập thành công
+        return response()->json([
+            'success' => true,
+            'status' => 200,
+            'message' => 'Đăng nhập thành công!',
+            'role' => $roleName,
+            'user' =>  Auth::user()
         ]);
-     }
+    }
+
+
+
 
     /**
      * Destroy an authenticated session.

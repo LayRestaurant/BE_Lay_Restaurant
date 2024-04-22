@@ -21,6 +21,3 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 require __DIR__.'/auth.php';
 
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-                ->middleware('guest')
-                ->name('login');

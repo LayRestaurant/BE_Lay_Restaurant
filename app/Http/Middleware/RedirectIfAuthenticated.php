@@ -18,15 +18,23 @@ class RedirectIfAuthenticated
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next, ...$guards)
-    {
-        $guards = empty($guards) ? [null] : $guards;
+{
+    $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
-            }
+    foreach ($guards as $guard) {
+        if (Auth::guard($guard)->check()) {
+            // Nếu người dùng đã đăng nhập, thực hiện việc trả về một response tùy chỉnh ở đây
+            return response()->json([
+                'success' => true,
+                'status' => 200,
+                'data' => [
+                    'user' =>  Auth::user()
+                ]
+            ]);
         }
-
-        return $next($request);
     }
+
+    return $next($request);
+}
+
 }
