@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExpertDetailController;
 use App\Http\Controllers\ContactController;
 
@@ -25,4 +26,4 @@ Route::get('/expertdetail',[ExpertDetailController::class,'index']);
 require __DIR__.'/auth.php';
 Route::get('/contacts',[ContactController::class,'getAllContacts']);
 
-
+Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
