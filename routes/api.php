@@ -22,11 +22,17 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/expertdetail',[ExpertDetailController::class,'index']);
-require __DIR__.'/auth.php';
-Route::get('/contacts',[ContactController::class,'getAllContacts']);
-Route::get('/reply-email/{id}',[ContactController::class,'getEmailById']);
-Route::post('/reply-email',[ContactController::class,'replyEmail']);
+// auth routes
+require __DIR__ . '/auth.php';
 
-Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
-Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
+// admin routes
+Route::prefix('admin')->group(function () {
+
+    Route::get('/expertdetail', [ExpertDetailController::class, 'index']);
+    Route::get('/contacts', [ContactController::class, 'getAllContacts']);
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::get('/reply-email/{id}', [ContactController::class, 'getEmailById']);
+    Route::post('/reply-email', [ContactController::class, 'replyEmail']);
+
+});
