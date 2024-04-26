@@ -29,3 +29,4 @@ Route::get('/reply-email/{id}',[ContactController::class,'getEmailById']);
 Route::post('/reply-email',[ContactController::class,'replyEmail']);
 
 Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
