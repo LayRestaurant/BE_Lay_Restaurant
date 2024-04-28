@@ -23,37 +23,37 @@ class ContactController extends Controller
             return response()->json([
                 'success' => false,
                 'status' => 404,
-                'message' => 'No contact list!',
+                'message' => 'No contact list',
             ]);
         }
 
         return response()->json([
             'success' => true,
             'status' => 200,
-            'message' => 'Success!',
-            'content' => [
+            'message' => 'Success',
+            'data' => [
                 'contacts' => $contacts,
             ],
         ]);
     }
-    public function getEmailById(Request $request)
+    public function getContactDetail(Request $request)
     {
         $id = $request->id;
-        $user = User::find($id);
-        if ($user) {
+        $contact = Contact::with('user')->find($id);
+        if ($contact) {
             return response()->json([
                 'success' => true,
                 'status' => 200,
-                'message' => 'Success!',
-                'content' => [
-                    'email' => $user->email,
+                'message' => 'Success',
+                'data' => [
+                    'contact'=>$contact,
                 ],
             ]);
         } else {
             return response()->json([
                 'success' => false,
                 'status' => 404,
-                'message' => 'User not found',
+                'message' => 'Contact not found',
             ]);
         }
     }
@@ -68,8 +68,8 @@ class ContactController extends Controller
                 [
                     'success' => true,
                     'status' => 200,
-                    'message' => 'Email sent successfully!',
-                    'content' => [
+                    'message' => 'Email sent successfully',
+                    'data' => [
                         'email' => $user_mail,
                         'subject' => $subject,
                         'body' => $body,
