@@ -22,7 +22,6 @@ use App\Http\Controllers\PostController;
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
-
 // admin routes
 Route::prefix('admin')->group(function () {
     
@@ -37,5 +36,6 @@ Route::prefix('admin')->group(function () {
     Route::delete('/contacts/{id}',[ContactController::class,'deleteContact']);
     //post
     Route::apiResource('posts',PostController::class);
+    Route::put('posts/update-status/{id}',[PostController::class,'updatePostStatus'])->name('admin.post.update.status');
 });
 require __DIR__.'/auth.php';
