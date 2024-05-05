@@ -38,6 +38,16 @@ Route::prefix('admin')->group(function () {
     Route::apiResource('posts',PostController::class);
     Route::put('posts/update-status/{id}',[PostController::class,'updatePostStatus'])->name('admin.post.update.status');
 });
+
+Route::prefix('user')->group(function (){
+    Route::get('/user-profile/{id}', [UserController::class, 'show'])->name('user.profile');
+
+});
+
+Route::prefix('expert')->group(function (){
+    Route::get('/expert-profile/{id}', [ExpertDetailController::class, 'show'])->name('expert.profile');
+
+});
 // auth api
 require __DIR__.'/auth.php';
 
