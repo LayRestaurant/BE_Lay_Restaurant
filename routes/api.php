@@ -1,13 +1,11 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ExpertDetailController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\ExpertController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CommentsPostController;
+use App\Http\Controllers\ExpertDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +24,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 // admin routes
 Route::get('/experts', [ExpertDetailController::class, 'getListExpert']);
 Route::prefix('admin')->group(function () {
+    Route::get('/comments', [CommentsPostController::class, 'index']);
 
     Route::get('/expertdetail', [ExpertDetailController::class, 'index']);
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
