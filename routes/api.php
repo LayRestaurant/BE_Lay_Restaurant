@@ -1,11 +1,13 @@
 <?php
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\CommentsPostController;
 use App\Http\Controllers\ExpertDetailController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentsPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,12 +34,14 @@ Route::prefix('admin')->group(function () {
     // contact
     Route::get('/contacts', [ContactController::class, 'getAllContacts']);
     Route::get('/contacts/{id}',[ContactController::class,'getContactDetail']);
-    Route::post('/reply-email', [ContactController::class, 'replyEmail']);
+    Route::post('/replyEmail', [ContactController::class, 'replyEmail']);
     Route::post('/contacts',[ContactController::class,'updateContactStatus']);
     Route::delete('/contacts/{id}',[ContactController::class,'deleteContact']);
     //post
     Route::apiResource('posts',PostController::class);
     Route::put('posts/update-status/{id}',[PostController::class,'updatePostStatus'])->name('admin.post.update.status');
+    //booking
+    Route::get('/bookings',[BookingController::class,'getAllBookings']);
 });
 
 Route::prefix('user')->group(function (){
