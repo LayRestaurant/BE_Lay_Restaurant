@@ -65,5 +65,7 @@ Route::prefix('posts')->group(function (){
 
 // auth api
 require __DIR__.'/auth.php';
+//contact us
+Route::post('/contactUs', [ContactController::class, 'contactUs']);
 
 
