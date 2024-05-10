@@ -13,10 +13,10 @@ return [
     |
     */
 
-    // 'defaults' => [
-    //     'guard' => 'web',
-    //     'passwords' => 'users',
-    // ],
+    'defaults' => [
+        'guard' => 'api',
+        'passwords' => 'users',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -31,16 +31,24 @@ return [
     | users are actually retrieved out of your database or other storage
     | mechanisms used by this application to persist your user's data.
     |
-    | Supported: "session"
+    | Supported: "session", "token"
     |
     */
 
-    // 'guards' => [
-    //     'web' => [
-    //         'driver' => 'session',
-    //         'provider' => 'users',
-    //     ],
-    // ],
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'api' => [
+            'driver' => 'jwt', // Sử dụng JWT cho API authentication
+            'provider' => 'users',
+            'hash' => false,
+        ],
+    ],
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -62,15 +70,9 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\User::class, // Đảm bảo rằng đường dẫn đến model User là chính xác
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
@@ -108,23 +110,5 @@ return [
 
     'password_timeout' => 10800,
 
-    'defaults' => [
-        'guard' => 'api',
-        'passwords' => 'users',
-    ],
-
-
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-
-        'api' => [
-            'driver' => 'jwt',
-            'provider' => 'users',
-            'hash' => false,
-        ],
-    ]
 
 ];
