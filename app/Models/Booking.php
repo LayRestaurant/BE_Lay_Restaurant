@@ -11,10 +11,15 @@ class Booking extends Model
     public $table = 'bookings';
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function calendar()
     {
         return $this->belongsTo(Calendar::class, 'calendar_id');
     }
+    public function feedbackExpert()
+    {
+        return $this->hasOne(FeedbackExpert::class,'booking_id');
+    }
 }
+
