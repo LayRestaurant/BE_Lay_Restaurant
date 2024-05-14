@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExpertDetailController;
 use App\Http\Controllers\ContactController;
@@ -48,13 +49,17 @@ Route::get('/feedbacks',[FeedbackController::class,'getAllFeedbacks']);
 Route::post('/feedbacks/create',[FeedbackController::class,'createFeedbackExpert']);
 Route::prefix('user')->group(function () {
     Route::get('/user-profile/{id}', [UserController::class, 'show'])->name('user.profile');
+    Route::patch('/update-user-profile', [UserController::class, 'updateUserProfile'])->name('update.user.profile');
     Route::post('book-calendar/{calendar_id}', [BookingController::class, 'bookCalendar'])->name('user.book.calendar');
 });
 
 Route::prefix('experts')->group(function (){
     Route::get('/', [ExpertDetailController::class, 'getListExpert']);
     Route::get('/expert-profile/{id}', [ExpertDetailController::class, 'show'])->name('expert.profile');
+    Route::patch('/update-expert-profile', [ExpertDetailController::class, 'updateExpertProfile'])->name('update.expert.profile');
     Route::get('/{id}', [ExpertDetailController::class, 'getExpertDetail']);
+    //calendar
+    Route::post('/calendar/create', [CalendarController::class, 'createNewCalendar']);
 });
 
 
