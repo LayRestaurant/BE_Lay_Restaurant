@@ -71,8 +71,8 @@ Route::prefix('posts')->group(function () {
     // post
     // create a new post
     Route::post('/create',[PostController::class,'store']);
-    Route::delete('/delete/{id}', [PostController::class, 'destroy']);
-
+    Route::put('/update/{id}',[PostController::class,'updatePostContent']);
+    Route::delete('/delete/{id}', [PostController::class, 'deletePost']);
     // comment of the post
     // create a new comment
     Route::post('/{postId}/comments/create', [CommentsPostController::class, 'store']);
