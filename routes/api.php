@@ -56,15 +56,17 @@ Route::prefix('user')->group(function () {
 Route::prefix('experts')->group(function (){
     Route::get('/', [ExpertDetailController::class, 'getListExpert']);
     Route::get('/expert-profile/{id}', [ExpertDetailController::class, 'show'])->name('expert.profile');
-    Route::patch('/update-expert-profile', [ExpertDetailController::class, 'updateExpertProfile'])->name('update.expert.profile');
+    
     Route::get('/{id}', [ExpertDetailController::class, 'getExpertDetail']);
-    //calendar
-    Route::post('/calendar/create', [CalendarController::class, 'createNewCalendar']);
     // serach experts
     Route::post('/search', [ExpertDetailController::class, 'search']);
 
 });
-
+Route::middleware('role.expert')->prefix('experts')->group(function () {
+    Route::patch('/update-expert-profile', [ExpertDetailController::class, 'updateExpertProfile'])->name('update.expert.profile');
+    //calendar
+    Route::post('/calendar/create', [CalendarController::class, 'createNewCalendar']);
+});
 
 // post
 Route::prefix('posts')->group(function () {
