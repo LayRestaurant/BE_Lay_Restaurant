@@ -16,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('user','comments.user','comments.replies.user')->where('status',1)->get();
+        $posts = Post::with('user', 'comments.user', 'comments.replies.user')->where('status', 1)->get();
         return response()->json([
             'success' => true,
             'message' => 'Show all posts successfully!',
@@ -36,20 +36,20 @@ class PostController extends Controller
         $userId = $user->id;
         // Validate incoming request
         $request->validate([
-        'content' => 'required|string',
-        'is_anonymous' => 'required|boolean',
-         ]);
-        $data=[
+            'content' => 'required|string',
+            'is_anonymous' => 'required|boolean',
+        ]);
+        $data = [
             'user_id' => $userId,
-            'content'=>$request->content,
-            'is_anonymous'=>$request->is_anonymous,
+            'content' => $request->content,
+            'is_anonymous' => $request->is_anonymous,
         ];
 
         $post = Post::create($data);
 
         return response()->json([
-            'success'=>true,
-            'message' => 'Create post successfully', 
+            'success' => true,
+            'message' => 'Create post successfully',
             'post' => $post
         ], 201);
     }
@@ -62,12 +62,12 @@ class PostController extends Controller
      */
     public function show($postId)
     {
-        $post = Post::with('user','comments.user','comments.replies.user')->find($postId);
-        if(empty($post)){
+        $post = Post::with('user', 'comments.user', 'comments.replies.user')->find($postId);
+        if (empty($post)) {
             return response()->json([
                 'success' => false,
                 'message' => 'PostID not found',
-                'data'=> null,
+                'data' => null,
             ], 404);
         }
         return response()->json([
@@ -84,14 +84,14 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function updatePostStatus(Request $request,$id=0)
+    public function updatePostStatus(Request $request, $id = 0)
     {
-        $post=Post::find($id);
-        if(empty($post)){
+        $post = Post::find($id);
+        if (empty($post)) {
             return response()->json([
                 'success' => false,
                 'message' => 'PostID not found',
-                'data'=> null,
+                'data' => null,
             ], 404);
         }
         $newStatus = !($post->status);
@@ -102,10 +102,37 @@ class PostController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Updated status post successfully!',
-            'data'=> $post,
+            'data' => $post,
         ], 200);
     }
+    public function updatePostContent(Request $request,$id=0){
+        $user = $this->getUser($request);
+        $userId = $user->id;
+        $post = Post::where('id', $id)->where('user_id', $userId)->first();
+        if(empty($post)){
+            return response()->json([
+                'success' => false,
+                'message' => 'user not match',
+            ], 404);
+        }
+         // Validate incoming request
+        $request->validate([
+        'content' => 'required|string',
+        'is_anonymous' => 'required|boolean',
+            ]);
+        $data=[
+            'content'=>$request->content,
+            'is_anonymous'=>$request->is_anonymous,
+        ];
 
+            $post->update($data);
+
+            return response()->json([
+                'success'=>true,
+                'message' => 'Update post successfully',
+                'post' => $post
+            ], 200);
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -115,11 +142,11 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::with('comments', 'comments.replies')->find($id);
-        if(empty($post)){
+        if (empty($post)) {
             return response()->json([
                 'success' => false,
                 'message' => 'PostID not found',
-                'data'=> null,
+                'data' => null,
             ], 404);
         }
         $post->comments()->delete();
@@ -128,7 +155,6 @@ class PostController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Post and its comments deleted successfully!',
-            'data' => null,
         ], 200);
     }
 }
