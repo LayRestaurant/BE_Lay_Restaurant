@@ -12,6 +12,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentsPostController;
 use App\Http\Controllers\FeedbackController;
 use App\Models\Feedback;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +134,9 @@ Route::prefix('posts')->group(function () {
 //contact us
 // create new contact
 Route::post('/contactUs', [ContactController::class, 'contactUs']);
+
+//VN pay
+Route::post('/payment', [PaymentController::class, 'makePayment']);
 
 
 // auth api
