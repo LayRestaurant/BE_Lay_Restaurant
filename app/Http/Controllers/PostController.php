@@ -3,45 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\CommentsPost;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $posts = Post::with('user', 'comments.user', 'comments.replies.user')->where('status', 1)->get();
+        $posts = Post::with([
+            'user',
+            'comments' => function ($query) {
+                $query->whereNull('parent_id');
+            }
+        ])->get();
         return response()->json([
             'success' => true,
             'message' => 'Show all posts successfully!',
             'data' => $posts,
-        ], 200);
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $user = $this->getUser($request);
         $userId = $user->id;
         // Validate incoming request
-        $request->validate([
+        $validated = $request->validate([
             'content' => 'required|string',
             'is_anonymous' => 'required|boolean',
         ]);
         $data = [
             'user_id' => $userId,
-            'content' => $request->content,
+            'content' => $validated['content'],
             'is_anonymous' => $request->is_anonymous,
         ];
 
@@ -53,16 +58,42 @@ class PostController extends Controller
             'post' => $post
         ], 201);
     }
+    public function createPost(Request $request): JsonResponse
+    {
+        // Validate incoming request
+        $validated = $request->validate([
+            'user_id'=>'required',
+            'content' => 'required|string',
+            'is_anonymous' => 'required|boolean',
+        ]);
+        $data = [
+            'user_id' => $validated['user_id'],
+            'content' => $validated['content'],
+            'is_anonymous' => $request->is_anonymous,
+        ];
 
+        $post = Post::create($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Create post successfullyy',
+            'post' => $post
+        ], 201);
+    }
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param $postId
+     * @return JsonResponse
      */
-    public function show($postId)
+    public function show($postId): JsonResponse
     {
-        $post = Post::with('user', 'comments.user', 'comments.replies.user')->find($postId);
+        $post = Post::with([
+            'user',
+            'comments' => function ($query) {
+                $query->whereNull('parent_id')->with('replies','user');
+            }
+        ])->findOrFail($postId);
         if (empty($post)) {
             return response()->json([
                 'success' => false,
@@ -74,17 +105,17 @@ class PostController extends Controller
             'success' => true,
             'message' => 'Show post successfully!',
             'data' => $post,
-        ], 200);
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Post $post
+     * @return JsonResponse
      */
-    public function updatePostStatus(Request $request, $id = 0)
+    public function updatePostStatus(Request $request, $id = 0): JsonResponse
     {
         $post = Post::find($id);
         if (empty($post)) {
@@ -121,7 +152,7 @@ class PostController extends Controller
         'is_anonymous' => 'required|boolean',
             ]);
         $data=[
-            'content'=>$request->content,
+            'content' => $request['content'],
             'is_anonymous'=>$request->is_anonymous,
         ];
 
@@ -136,8 +167,8 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return Response
      */
     public function destroy($id)
     {

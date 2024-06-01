@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExpertDetailController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\CommentsPostController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeedbackController;
 use App\Models\Feedback;
 use App\Http\Controllers\PaymentController;
@@ -53,16 +53,16 @@ Route::prefix('admin')->middleware('role.admin')->group(function () {
     // Post
     Route::apiResource('posts', PostController::class);
     Route::put('/posts/{id}', [PostController::class, 'updatePostStatus'])->name('admin.post.update.status');
-
+    Route::post('/posts',[PostController::class, 'createPost'])->name('admin.post.create');
     // comments
     // Lấy danh sáchbình luận
-    Route::get('/comments', [CommentsPostController::class, 'index']);
+    Route::get('/comments', [CommentController::class, 'index']);
     // Tạo bình luận mới.
-    Route::post('/comments', [CommentsPostController::class, 'createPostByAdmin']);
+    Route::post('/comments', [CommentController::class, 'createPostByAdmin']);
     // update status comment
-    Route::put('/comments/{commentId}', [CommentsPostController::class, 'updatePostByAdmin']);
+    Route::put('/comments/{commentId}', [CommentController::class, 'updatePostByAdmin']);
     // delete comment
-    Route::delete('/comments/{commentId}', [CommentsPostController::class, 'destroyPostByAdmin']);
+    Route::delete('/comments/{commentId}', [CommentController::class, 'destroyPostByAdmin']);
 
     //booking
     // Lấy danh sách booking
@@ -122,13 +122,15 @@ Route::prefix('posts')->group(function () {
     // create a new post
     Route::post('/create', [PostController::class, 'store']);
     Route::delete('/delete/{id}', [PostController::class, 'destroy']);
+    Route::get('/{postId}', [PostController::class, 'show']);
+    Route::get('/', [PostController::class, 'index']);
     // comment of the post
     // create a new comment
-    Route::post('/{postId}/comments/create', [CommentsPostController::class, 'store']);
+    Route::post('/{postId}/comments/create', [CommentController::class, 'store']);
     // update comment
-    Route::post('/{postId}/comments/update/{commentId}', [CommentsPostController::class, 'update']);
+    Route::post('/{postId}/comments/update/{commentId}', [CommentController::class, 'update']);
     // delete comment
-    Route::delete('/{postId}/comments/delete/{commentId}', [CommentsPostController::class, 'destroy']);
+    Route::delete('/{postId}/comments/delete/{commentId}', [CommentController::class, 'destroy']);
 });
 
 //contact us
