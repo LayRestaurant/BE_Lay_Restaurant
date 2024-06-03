@@ -86,10 +86,11 @@ class ExpertDetailController extends Controller
             ->get();
 
         $feedback = DB::table('bookings')
-        ->join('feedback_experts', 'bookings.id', '=', 'feedback_experts.booking_id')
-        ->where('bookings.user_id', '=', $id)
-        ->select('feedback_experts.*')
-        ->get();
+            ->join('feedback_experts', 'bookings.id', '=', 'feedback_experts.booking_id')
+            ->join('calendars', 'calendars.id', '=', 'bookings.calendar_id') // Corrected the join condition
+            ->where('calendars.expert_id', '=', $id)
+            ->select('feedback_experts.*')
+            ->get();
 
 
         // Kết hợp thông tin từ $user và $expertDetail vào một mảng
