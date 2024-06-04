@@ -52,7 +52,7 @@ Route::prefix('admin')->middleware('role.admin')->group(function () {
 
     // Post
     Route::apiResource('posts', PostController::class);
-    Route::put('/posts/{id}', [PostController::class, 'updatePostStatus'])->name('admin.post.update.status');
+    Route::put('/posts/update/{id}', [PostController::class, 'updatePostStatus'])->name('admin.post.update.status');
     Route::post('/posts', [PostController::class, 'createPost'])->name('admin.post.create');
     // comments
     // Lấy danh sáchbình luận
@@ -129,7 +129,7 @@ Route::prefix('posts')->group(function () {
     // post
     // create a new post
     Route::post('/create', [PostController::class, 'store']);
-    Route::delete('/delete/{id}', [PostController::class, 'destroy']);
+    Route::delete('/delete/{id}', [PostController::class, 'deletePost']);
     Route::get('/{postId}', [PostController::class, 'show']);
     Route::get('/', [PostController::class, 'index']);
     // comment of the post
