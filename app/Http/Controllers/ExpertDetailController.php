@@ -80,7 +80,7 @@ class ExpertDetailController extends Controller
         // Bước 2: Truy cập thông tin của user thông qua mối quan hệ
         $user = $expertDetail->user;
         // Step 3: Get all calendars that are booked and available in the present and future
-        $currentDateTime = date("Y-m-d H:i:s");
+        $currentDateTime = date("H:i:s");
         $calendars = Calendar::where('expert_id', $id)
             ->where('start_time', '>=', $currentDateTime)
             ->get();
@@ -217,16 +217,7 @@ class ExpertDetailController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|email',
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'regex:/[A-Z]/', // At least one uppercase letter
-                'regex:/[a-z]/', // At least one lowercase letter
-                'regex:/[0-9]/', // At least one digit
-                'regex:/[!@#$%^&*()\-_=+{};:,<.>]/', // At least one special character
-            ],
-            'profile_picture' => 'string',
+            'profile_picture' => 'string|url',
             'date_of_birth' => 'date',
             'phone_number' => [
                 'numeric',
@@ -235,7 +226,7 @@ class ExpertDetailController extends Controller
             ],
             'gender' => 'string',
             'experience' => 'string',
-            'certificate' => 'string'
+            'certificate' => 'string|url'
         ]);
 
         if (empty($expertID)) {
@@ -264,7 +255,6 @@ class ExpertDetailController extends Controller
         // Update expert information
         $expert->name = $request->input('name');
         $expert->email = $request->input('email');
-        $expert->password = $request->input('password');
         $expert->address = $request->input('address'); // Make sure to set the address
         $expert->phone_number = $request->input('phone_number');
         $expert->gender = $request->input('gender');
