@@ -279,7 +279,7 @@ class UserController extends Controller
         $user->address = $request->input('address ');
         $user->phone_number = $request->input('phone_number');
         $user->gender = $request->input('gender');
-        $user-> profile_picture = $request->input('profile_picture');
+        $user->profile_picture = $request->input('profile_picture');
         $user->status = 1;
         $user->save();
         return response()->json([
@@ -310,6 +310,26 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'User deleted successfully',
+        ], 200);
+    }
+
+    // get user statistics by created_at month
+    public function userStatsByCreatedAt()
+    {
+        // Lấy dữ liệu thống kê số lượng người dùng theo tháng dựa trên created_at
+        $userStats = User::select(
+            DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Trả về dữ liệu thống kê
+        return response()->json([
+            'success' => true,
+            'message' => 'User statistics fetched successfully',
+            'data' => $userStats,
         ], 200);
     }
 }
