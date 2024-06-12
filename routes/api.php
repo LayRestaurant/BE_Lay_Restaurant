@@ -84,6 +84,14 @@ Route::prefix('admin')->middleware('role.admin')->group(function () {
 
     //  Lấy thông tin profile admin
     Route::get('/admin-profile/{id}', [UserController::class, 'showAdminProfile'])->name('admin.profile');
+
+    // thống kê số lượng users
+    Route::get('/stats', [UserController::class, 'userStatsByCreatedAt'])->name('stats');
+    Route::get('/bookings-stats', [UserController::class, 'getMonthlyBookingStats'])->name('stats-booking');
+    Route::get('/allCalendars', [UserController::class, 'getAllCalendar'])->name('allCalendars');
+
+
+
 });
 
 // feedbacks
