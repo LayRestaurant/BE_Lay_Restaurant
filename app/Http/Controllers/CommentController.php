@@ -101,10 +101,16 @@ class CommentController extends Controller
                 'parent_id' => $request->parent_id,
             ];
             $comment = Comment::create($data);
+            $comment2 = Comment::with([
+                'user',
+                'replies' => function ($query) {
+                    $query->whereNull('parent_id')->with('replies.user', 'user');
+                },
+            ])->where('id', $comment->id)->first();
             return response()->json([
                 'success' => true,
                 'message' => 'Created comment post successfully!',
-                'data' => $comment,
+                'data' => $comment2,
             ], 201);
         } catch (ValidationException $e) {
             return response()->json([
@@ -176,8 +182,7 @@ class CommentController extends Controller
         try {
             // Validate request data
             $validatedData = $request->validate([
-                'content' => 'required|string',
-                'status' => 'required|integer', // Validate status as an integer
+                'content' => 'required|string', // Validate status as an integer
             ]);
 
             // Authenticate user
@@ -198,12 +203,17 @@ class CommentController extends Controller
 
             // Update the comment
             $comment->update($validatedData);
-
+            $comment2 = Comment::with([
+                'user',
+                'replies' => function ($query) {
+                    $query->whereNull('parent_id')->with('replies.user', 'user');
+                },
+            ])->where('id', $comment->id)->first();
             // Return success response
             return response()->json([
                 'success' => true,
                 'message' => 'Comment post updated successfully!',
-                'data' => $comment,
+                'data' => $comment2,
             ], 200);
         } catch (ValidationException $e) {
             // Return validation error response
@@ -281,26 +291,32 @@ class CommentController extends Controller
 
     public function createPostByAdmin(Request $request)
     {
-        //  lấy user hiện tại
+        // Get the current user
         $user = $this->getUser($request);
 
+        // Validate the request data
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'post_id' => 'required',
             'content' => 'required',
-            'status' => 'required',
+            'status' => 'required|integer', // Ensure status is an integer
         ]);
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
+        // Create the comment data array
         $data = [
             'post_id' => $request->post_id,
             'user_id' => $request->user_id,
-            'content' => $validator['content'],
-            'status' =>  $request->status, // Validate status as an integer
+            'content' => $request->content,
+            'status' => $request->status,
         ];
+
+        // Create the comment post
         $commentsPost = Comment::create($data);
+
         return response()->json([
             'success' => true,
             'message' => 'Created comment post successfully!',
