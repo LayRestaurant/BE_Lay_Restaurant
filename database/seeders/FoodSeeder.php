@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Comment;
 use Illuminate\Database\Seeder;
 
-class CommentSeeder extends Seeder
+class FoodSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +13,6 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
-        Comment::factory()->count(20)->create();
+        \App\Models\Food::factory(10)->create();
     }
 }

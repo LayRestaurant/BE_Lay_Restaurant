@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Booking;
 use App\Models\Comment;
 use App\Models\ExpertDetail;
+use App\Models\Food;
 use Illuminate\Database\Seeder;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             CalendarSeeder::class,
             BookingSeeder::class,
             FeedbackSeeder::class,
+            FoodSeeder::class,
         ]);
 
     }

@@ -54,6 +54,6 @@ class UsersSeeder extends Seeder
             ];
         DB::table('users')->insert($data);
         User::factory()->count(20)->create();
-        User::factory()->expert()->count(40)->create();
+        User::factory()->expert()->count(20)->create();
     }
     }

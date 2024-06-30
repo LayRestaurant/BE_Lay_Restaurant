@@ -19,8 +19,7 @@ return new class extends Migration
             $table->integer('rating');
             $table->text('content');
             $table->timestamps();
-            //  foreign key
-            $table->foreign('booking_id')->references('id')->on('bookings');
+
         });
     }
 

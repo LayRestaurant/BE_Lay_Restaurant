@@ -164,4 +164,6 @@ Route::post('/payment', [PaymentController::class, 'makePayment'])->middleware('
 Route::get('/profile/notifications',[PostController::class, 'getAllPostsByUserId'])->middleware('activeAccount');
 // auth api
 require __DIR__ . '/auth.php';
+require __DIR__ . '/food.php';
+
 
