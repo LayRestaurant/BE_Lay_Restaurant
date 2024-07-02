@@ -17,7 +17,7 @@ class FoodController extends Controller
         $page = request()->input('page', 1);
 
         // Sử dụng paginate để lấy dữ liệu của trang hiện tại, mỗi trang có 20 bản ghi
-        $foods = $query->paginate(20, ['*'], 'page', $page);
+        $foods = $query->paginate(9, ['*'], 'page', $page);
 
         return response()->json($foods);
     }

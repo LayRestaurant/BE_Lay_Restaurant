@@ -30,7 +30,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('admin')->middleware('role.admin')->group(function () {
+Route::prefix('admin')->group(function () {
     // users
     // Tạo người dùng mới.
     Route::post('/users', [UserController::class, 'create'])->name('admin.users.create');
@@ -105,7 +105,7 @@ Route::prefix('user')->group(function () {
     //booking
     Route::get('/{userId}/bookings', [BookingController::class, 'getAllBookingsByUserId']);
     Route::get('/{userId}/bookings/{bookingId}', [BookingController::class, 'getBookingByUserIdAndBookingId']);
-})->middleware('activeAccount');
+});
 
 // expert routes
 Route::prefix('experts')->group(function () {
@@ -165,5 +165,7 @@ Route::get('/profile/notifications',[PostController::class, 'getAllPostsByUserId
 // auth api
 require __DIR__ . '/auth.php';
 require __DIR__ . '/food.php';
+require __DIR__ . '/messages.php';
+
 
 

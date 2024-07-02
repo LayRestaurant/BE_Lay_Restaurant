@@ -38,7 +38,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::all();
+        $users = User::paginate(10);
         return response()->json([
             "success" => true,
             "message" => "Get all users successfully",
@@ -142,8 +142,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
-        $user = $this->user::where('role_id', '=', 2)->find($id);
+        $user = $this->user::find($id);
         if (empty($user)) {
             return response()->json([
                 'success' => false,
