@@ -15,4 +15,16 @@ class Message extends Model
         'content',
         'read'
     ];
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
+    }
+
+    /**
+     * Get the recipient of the message.
+     */
+    public function recipient()
+    {
+        return $this->belongsTo(User::class, 'recipient_id');
+    }
 }

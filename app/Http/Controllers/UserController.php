@@ -339,7 +339,8 @@ class UserController extends Controller
         // Lấy dữ liệu thống kê số lượng người dùng theo tháng dựa trên created_at
         $userStats = Booking::select(
             DB::raw('SUBSTRING(DATE_FORMAT(created_at, "%M"), 1, 3) as month'),
-            DB::raw('COUNT(*) as count'))
+            DB::raw('COUNT(*) as count')
+        )
             ->groupBy('month')
             ->orderBy('month')
             ->get();
@@ -352,13 +353,25 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function getAllCalendar(){
+    public function getAllCalendar()
+    {
         $calendars = DB::table('calendars')->get();
-         // Trả về dữ liệu thống kê
-         return response()->json([
+        // Trả về dữ liệu thống kê
+        return response()->json([
             'success' => true,
             'message' => 'User statistics fetched successfully',
             'data' => $calendars,
+        ], 200);
+    }
+    public function getAllUsersAndMessages(Request $request)
+    {
+        // Load users with their sent and received messages, then paginate
+        $users = User::with(['sentMessages', 'receivedMessages'])->paginate(10);
+
+        return response()->json([
+            "success" => true,
+            "message" => "Get all users successfully",
+            "data" => $users
         ], 200);
     }
 

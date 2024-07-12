@@ -29,3 +29,7 @@ Route::middleware('web')->get('/api/csrf-token', function () {
         'csrf_token' => csrf_token()
     ]);
 });
+Route::get('/socket.io', function () {
+    return view('socket');
+})->name('socket');
+

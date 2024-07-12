@@ -147,7 +147,7 @@ class AuthController extends Controller
     {
         // Kiểm tra thông tin người dùng cho các vai trò khác
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'nullable',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string||confirmed|min:6|max:25',
             'role_id' => 'required|exists:roles,id',
@@ -161,7 +161,7 @@ class AuthController extends Controller
 
         // Tạo người dùng mới
         $user = User::create([
-            'name' => $request->name,
+            'name' => 'User',
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'address' => '',

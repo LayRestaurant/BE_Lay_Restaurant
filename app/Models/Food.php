@@ -11,18 +11,8 @@ class Food extends Model
 
     public $timestamps = false;
 
-    // /**
-	//  * The database table used by the model.
-	//  *
-	//  * @var string
-	//  */
-	// protected $table = 'user';
+    // protected $table = 'food'; // You can uncomment this line if needed
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'price',
@@ -30,4 +20,10 @@ class Food extends Model
         'type',
         'picture',
     ];
+
+    // Define the inverse relationship with the ShoppingCart model
+    public function shoppingCarts()
+    {
+        return $this->hasMany(ShoppingCart::class);
+    }
 }
