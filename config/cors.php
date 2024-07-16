@@ -1,6 +1,6 @@
 <?php
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie','/csrf-token'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'api/csrf-token'],
     'allowed_methods' => ['*'],
     'allowed_origins' => ['*'],
     'allowed_origins_patterns' => [],
