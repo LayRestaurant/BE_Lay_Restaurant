@@ -25,7 +25,8 @@ return [
         'http://localhost:3002',
         'http://localhost:3003',
         'https://bitstorm.zeabur.app',
-        'https://admin-bitstorm.zeabur.app'
+        'https://admin-bitstorm.zeabur.app',
+        'https://lay-restaurant.vercel.app/'
 
     ],
     'allowed_origins_patterns' => [],
