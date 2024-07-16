@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\UserController;
 
 Route::get('/foods', [FoodController::class, 'index']);
 Route::get('/foods/filter/{price}', [FoodController::class, 'filter']);
@@ -24,3 +25,5 @@ Route::get('/shopping-carts/{food_id}', [ShoppingCartController::class, 'show'])
 Route::put('/shopping-carts/{id}', [ShoppingCartController::class, 'update']);
 Route::delete('/shopping-carts/{food_id}', [ShoppingCartController::class, 'destroy']);
 Route::post('/shopping-carts/set-quantity', [ShoppingCartController::class, 'setQuantityOrder']);
+
+Route::post('/add-new-address', [UserController::class, 'addNewAddressDelivery']);

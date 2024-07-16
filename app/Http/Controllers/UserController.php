@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
@@ -10,11 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ExpertDetail;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 class UserController extends Controller
 {
     protected $user;
-
     public function __construct()
     {
         $this->user = new User();
@@ -45,7 +41,6 @@ class UserController extends Controller
             "data" => $users
         ], 200);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -62,11 +57,9 @@ class UserController extends Controller
             'experience' => 'nullable|string', // Trường experience có thể null
             'certificate' => 'nullable|string', // Trường certificate có thể null
         ]);
-
         if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
-
         // Tạo người dùng mới
         $user = User::create([
             'name' => $request->name,
@@ -80,12 +73,10 @@ class UserController extends Controller
             'status' => true,
             'role_id' => $request->role_id,
         ]);
-
         // Nếu vai trò là người dùng chuyên gia (role_id = 3) và có trường experience và certificate được cung cấp
         if ($request->role_id == 3 && $request->has('experience') && $request->has('certificate')) {
             // Kiểm tra xem đã có dữ liệu trong bảng expert_details tương ứng với user_id của người dùng mới hay không
             $checkExpert = DB::table('expert_details')->where('user_id', $user->id)->exists();
-
             // Nếu có dữ liệu, xóa dữ liệu cũ trước khi tạo mới
             if ($checkExpert) {
                 DB::table('expert_details')->where('user_id', $user->id)->delete();
@@ -98,13 +89,11 @@ class UserController extends Controller
                 'count_rating' => 5
             ]);
         }
-
         return response()->json([
             'message' => 'Created successfully!',
             'user' => $user
         ], 201);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -115,7 +104,6 @@ class UserController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      *
@@ -182,7 +170,6 @@ class UserController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -232,13 +219,11 @@ class UserController extends Controller
             'data' => $user,
         ], 200);
     }
-
     public function updateUserProfile(Request $request)
     {
         $userInfor = $this->getUser($request);
         $userID = $userInfor->id;
         $user = User::find($userID);
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|email',
@@ -250,21 +235,18 @@ class UserController extends Controller
             ],
             'gender' => 'string'
         ]);
-
         if (empty($user)) {
             return response()->json([
                 'success' => false,
                 'message' => 'user ID not found',
             ], 404);
         }
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => $validator->errors()->first(),
             ], 400); //Bad request
         }
-
         // Kiểm tra xem email đã tồn tại cho một người dùng khác chưa
         $existingUser = User::where('email', $request->input('email'))->where('id', '!=', $userID)->first();
         if ($existingUser) {
@@ -273,7 +255,6 @@ class UserController extends Controller
                 'message' => 'Email already exists in the system.',
             ], 400); //Bad request
         }
-
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->address = $request->input('address ');
@@ -297,22 +278,18 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-
         if (empty($user)) {
             return response()->json([
                 'success' => false,
                 'message' => 'User ID not found',
             ], 404);
         }
-
         $user->delete();
-
         return response()->json([
             'success' => true,
             'message' => 'User deleted successfully',
         ], 200);
     }
-
     // get user statistics by created_at month
     public function userStatsByCreatedAt()
     {
@@ -324,7 +301,6 @@ class UserController extends Controller
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-
         // Trả về dữ liệu thống kê
         return response()->json([
             'success' => true,
@@ -332,7 +308,6 @@ class UserController extends Controller
             'data' => $userStats,
         ], 200);
     }
-
     //
     public function getMonthlyBookingStats()
     {
@@ -344,7 +319,6 @@ class UserController extends Controller
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-
         // Trả về dữ liệu thống kê
         return response()->json([
             'success' => true,
@@ -352,7 +326,6 @@ class UserController extends Controller
             'data' => $userStats,
         ], 200);
     }
-
     public function getAllCalendar()
     {
         $calendars = DB::table('calendars')->get();
@@ -367,12 +340,47 @@ class UserController extends Controller
     {
         // Load users with their sent and received messages, then paginate
         $users = User::with(['sentMessages', 'receivedMessages'])->paginate(10);
-
         return response()->json([
             "success" => true,
             "message" => "Get all users successfully",
             "data" => $users
         ], 200);
     }
-
+    //
+    public function addNewAddressDelivery(Request $request)
+    {
+        $userInfor = $this->getUser($request);
+        $userID = $userInfor->id;
+        $user = User::find($userID);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'phone_number' => [
+                'numeric',
+                'digits:10', // Đảm bảo số điện thoại có 10 chữ số
+                'regex:/^(0)[0-9]{9}$/', // Đảm bảo số điện thoại bắt đầu bằng số 0 và theo sau là 9 chữ số
+            ],
+            'address' => 'string'
+        ]);
+        if (empty($user)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User ID not found',
+            ], 404);
+        }
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 400); // Bad request
+        }
+        // Update user data
+        $user->name = $request->input('name');
+        $user->address = $request->input('address'); // Remove extra space here
+        $user->phone_number = $request->input('phone');
+        $user->save();
+        return response()->json([
+            'success' => true,
+            'message' => "Add the user's address successfully",
+        ], 200);
+    }
 }

@@ -14,14 +14,14 @@ class PaymentController extends Controller
          $vnp_Returnurl = env('APP_ENV') === 'production'
          ? env('PRODUCTION_RETURN_URL')
          : env('FRONTEND_URL');
-         
+
         $vnp_TmnCode = "V1O3H94J"; //Mã website tại VNPAY
         $vnp_HashSecret = "ORWNNIISEYIOYFPCVQGSPKGCIACSEPPP"; //Chuỗi bí mật
 
         $vnp_TxnRef = rand(1,999999).rand(0,99999).'CF'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = "Thanh toan hoa don";
         $vnp_OrderType = "grocerymart coffee shop";
-        $vnp_Amount = $data['total'] * 1000;
+        $vnp_Amount = $data['total'] * 100;
         $vnp_Locale = 'VN';
         $vnp_BankCode = 'NCB';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
