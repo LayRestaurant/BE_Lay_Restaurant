@@ -37,10 +37,10 @@ class UsersSeeder extends Seeder
             ],
             [
                 'role_id' => 3,
-                'name' => "vanthu",
-                'email' => "vanthu@gmail.com",
+                'name' => "giabao",
+                'email' => "giabao@gmail.com",
                 'email_verified_at' => now(),
-                'password' => Hash::make('vanthu@gmail.com'),
+                'password' => Hash::make('giabao@gmail.com'),
                 'address' => '123 Main St',
                 'profile_picture' => 'https://png.pngtree.com/png-clipart/20230927/original/pngtree-photo-men-doctor-physician-chest-smiling-png-image_13143575.png',
                 'date_of_birth' => '1990-01-01',
@@ -53,7 +53,7 @@ class UsersSeeder extends Seeder
             ]
             ];
         DB::table('users')->insert($data);
-        User::factory()->count(20)->create();
-        User::factory()->expert()->count(20)->create();
+        User::factory()->count(5)->create();
+        User::factory()->expert()->count(5)->create();
     }
     }

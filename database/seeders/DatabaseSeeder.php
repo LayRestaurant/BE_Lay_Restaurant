@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             BookingSeeder::class,
             FeedbackSeeder::class,
             FoodSeeder::class,
-            MessageSeeder::class,
+            // MessageSeeder::class,
         ]);
 
     }

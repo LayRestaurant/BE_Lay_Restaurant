@@ -14,6 +14,6 @@ class FeedbackSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\FeedbackExpert::factory(20)->create();
+        \App\Models\FeedbackExpert::factory(5)->create();
     }
 }

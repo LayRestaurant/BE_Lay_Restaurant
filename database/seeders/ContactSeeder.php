@@ -17,6 +17,6 @@ class ContactSeeder extends Seeder
     public function run()
     {
         // Tạo 10 liên hệ giả định
-        Contact::factory()->count(20)->create();
+        Contact::factory()->count(5)->create();
     }
 }

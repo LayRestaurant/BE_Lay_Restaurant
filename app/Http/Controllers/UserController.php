@@ -339,7 +339,7 @@ class UserController extends Controller
     public function getAllUsersAndMessages(Request $request)
     {
         // Load users with their sent and received messages, then paginate
-        $users = User::with(['sentMessages', 'receivedMessages'])->paginate(10);
+        $users = User::with(['sentMessages', 'receivedMessages'])->paginate(20);
         return response()->json([
             "success" => true,
             "message" => "Get all users successfully",
