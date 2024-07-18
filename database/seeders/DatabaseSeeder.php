@@ -1,13 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
-use App\Models\Booking;
-use App\Models\Comment;
-use App\Models\ExpertDetail;
-use App\Models\Food;
 use Illuminate\Database\Seeder;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
@@ -32,6 +25,7 @@ class DatabaseSeeder extends Seeder
             BookingSeeder::class,
             FeedbackSeeder::class,
             FoodSeeder::class,
+            RoomSeeder::class
             // MessageSeeder::class,
         ]);
 
