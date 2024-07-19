@@ -1,6 +1,10 @@
 <?php
+
+use App\Http\Controllers\BookingRoomController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
+
+// Room APIs
 
 // Lấy tất cả phòng với phân trang
 Route::get('/rooms', [RoomController::class, 'index']);
@@ -13,3 +17,30 @@ Route::get('/rooms/search', [RoomController::class, 'search']);
 
 // Lấy chi tiết phòng
 Route::get('/rooms/{id}', [RoomController::class, 'show']);
+
+// Thay đổi trạng thái của phòng
+Route::patch('/rooms/{id}/change-status', [RoomController::class, 'changeStatusRoom']);
+
+
+// Booking Room APIs
+
+// Lấy tất cả các booking
+Route::get('/bookingRooms', [BookingRoomController::class, 'index']);
+
+// Lấy chi tiết một booking theo ID
+Route::get('/bookingRooms/{id}', [BookingRoomController::class, 'show']);
+
+// Tạo mới một booking
+Route::post('/bookingRooms', [BookingRoomController::class, 'store']);
+
+// Cập nhật thông tin một booking theo ID
+Route::put('/bookingRooms/{id}', [BookingRoomController::class, 'update']);
+
+// Xóa một booking theo ID
+Route::delete('/bookingRooms/{id}', [BookingRoomController::class, 'destroy']);
+
+// Lấy tất cả các booking của một phòng cụ thể
+Route::get('/bookingRooms/room/{roomId}', [BookingRoomController::class, 'getBookingsByRoomId']);
+
+// Lấy tất cả các booking của một user cụ thể
+Route::get('/bookingRooms/user/{userId}', [BookingRoomController::class, 'getBookingsByUserId']);
