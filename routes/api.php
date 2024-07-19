@@ -165,6 +165,7 @@ Route::get('/profile/notifications',[PostController::class, 'getAllPostsByUserId
 // auth api
 require __DIR__ . '/auth.php';
 require __DIR__ . '/food.php';
+require __DIR__ . '/room.php';
 require __DIR__ . '/messages.php';
 
 
