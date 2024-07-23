@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             FoodSeeder::class,
             RoomSeeder::class,
             BookingRoomsTableSeeder::class,
+            BookingFoodSeeder::class,
+            BookingFoodItemSeeder::class,
         ]);
 
     }

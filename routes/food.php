@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BookingFoodItemController;
+use App\Http\Controllers\BookingFoodController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\ShoppingCartController;
@@ -27,3 +29,20 @@ Route::delete('/shopping-carts/{food_id}', [ShoppingCartController::class, 'dest
 Route::post('/shopping-carts/set-quantity', [ShoppingCartController::class, 'setQuantityOrder']);
 
 Route::post('/add-new-address', [UserController::class, 'addNewAddressDelivery']);
+
+Route::prefix('booking-food')->group(function () {
+    Route::get('/', [BookingFoodController::class, 'index']);
+    Route::get('/{id}', [BookingFoodController::class, 'show']);
+    Route::post('/', [BookingFoodController::class, 'store']);
+    Route::put('/{id}', [BookingFoodController::class, 'update']);
+    Route::delete('/{id}', [BookingFoodController::class, 'destroy']);
+    Route::get('/user/{userId}', [BookingFoodController::class, 'getBookingFoodsByUserId']);
+});
+
+Route::prefix('booking-food-items')->group(function () {
+    Route::get('/', [BookingFoodItemController::class, 'index']);
+    Route::get('/{id}', [BookingFoodItemController::class, 'show']);
+    Route::post('/', [BookingFoodItemController::class, 'store']);
+    Route::put('/{id}', [BookingFoodItemController::class, 'update']);
+    Route::delete('/{id}', [BookingFoodItemController::class, 'destroy']);
+});
