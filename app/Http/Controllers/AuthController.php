@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
+use Firebase\JWT\JWT;
+use Firebase\JWT\JWK;
+use GuzzleHttp\Client;
 class AuthController extends Controller
 {
     /**
@@ -282,7 +284,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    protected function createNewToken($token)
+    public function createNewToken($token)
     {
         return response()->json([
             'access_token' => $token,
