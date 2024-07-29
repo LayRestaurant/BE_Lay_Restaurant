@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Room;
 use Illuminate\Http\Request;
+
 class RoomController extends Controller
 {
     // Lấy tất cả phòng với phân trang
@@ -33,16 +36,28 @@ class RoomController extends Controller
     public function search(Request $request)
     {
         $query = Room::query();
-        if ($request->has('search')) {
-            $query->where(function($q) use ($request) {
-                $q->where('name', 'like', '%'.$request->search.'%')
-                  ->orWhere('description', 'like', '%'.$request->search.'%')
-                  ->orWhere('status', 'like', '%'.$request->search.'%');
-            });
+
+        // Apply filters based on available fields
+        if ($request->input('name')) {
+            $query->where('name', 'like', "%{$request->name}%");
         }
-        $rooms = $query->paginate(8);
+        if ($request->input('price')) {
+            $query->where('price', 'like', "%{$request->price}%");
+        }
+        if ($request->input('capacity')) {
+            $query->where('capacity', 'like', "%{$request->capacity}%");
+        }
+        if ($request->input('room_type')) {
+            $query->where('room_type', "{$request->room_type}");
+        }
+
+        // Execute the query and get the results
+        $rooms = $query->get();
+
         return response()->json($rooms);
     }
+
+
     // Lấy chi tiết phòng
     public function show($id)
     {
