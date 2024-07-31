@@ -23,7 +23,7 @@ class BookingFoodController extends Controller
     {
         $data = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'order_number' => 'required|unique:booking_food,order_number',
+            'order_number' => 'required|unique:bookin',
             'order_date' => 'required|date',
             'total_amount' => 'required|numeric',
             'status' => 'required|string',
