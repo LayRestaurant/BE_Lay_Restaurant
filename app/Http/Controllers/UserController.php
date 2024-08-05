@@ -230,13 +230,12 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|email',
-            'profile_picture' => 'string|url',
+            'address' => 'string|required',
             'phone_number' => [
                 'numeric',
                 'digits:10', // Đảm bảo số điện thoại có 10 chữ số
                 'regex:/^(0)[0-9]{9}$/', // Đảm bảo số điện thoại bắt đầu bằng số 0 và theo sau là 9 chữ số
             ],
-            'gender' => 'string'
         ]);
         if (empty($user)) {
             return response()->json([
@@ -263,8 +262,8 @@ class UserController extends Controller
         $user->address = $request->input('address ');
         $user->phone_number = $request->input('phone_number');
         $user->gender = $request->input('gender');
-        $user->profile_picture = $request->input('profile_picture');
-        $user->status = 2;
+        $user->date_of_birth = $request->input('date_of_birth');
+        $user->status = $request->input('status');
         $user->save();
         return response()->json([
             'success' => true,
