@@ -101,6 +101,8 @@ Route::post('/feedbacks/create', [FeedbackController::class, 'createFeedbackExpe
 Route::prefix('user')->group(function () {
     Route::get('/profile/{id}', [UserController::class, 'show'])->name('user.profile');
     Route::patch('/profile', [UserController::class, 'updateUserProfile'])->name('update.user.profile');
+    Route::patch('/profile-image', [UserController::class, 'updateUserProfileImage'])->name('user.update.profile.image');
+    Route::patch('/name-email', [UserController::class, 'updateUserNameAndEmail'])->name('user.update.name.email');
     Route::post('/book-calendar/{calendar_id}', [BookingController::class, 'bookCalendar'])->name('user.book.calendar');
     //booking
     Route::get('/{userId}/bookings', [BookingController::class, 'getAllBookingsByUserId']);
@@ -138,7 +140,7 @@ Route::prefix('posts')->group(function () {
     Route::delete('/{postId}/unlike', [LikePostController::class, 'unlike']);
     // create a new post
     Route::post('/create', [PostController::class, 'store']);
-    Route::put('/update/{id}',[PostController::class,'updatePostContent']);
+    Route::put('/update/{id}', [PostController::class, 'updatePostContent']);
     Route::delete('/delete/{id}', [PostController::class, 'deletePost']);
     Route::get('/{postId}', [PostController::class, 'show']);
     Route::get('/', [PostController::class, 'index']);
@@ -161,12 +163,9 @@ Route::post('/payment', [PaymentController::class, 'makePayment'])->middleware('
 
 //notification
 // getAllPostsByUserId
-Route::get('/profile/notifications',[PostController::class, 'getAllPostsByUserId'])->middleware('activeAccount');
+Route::get('/profile/notifications', [PostController::class, 'getAllPostsByUserId'])->middleware('activeAccount');
 // auth api
 require __DIR__ . '/auth.php';
 require __DIR__ . '/food.php';
 require __DIR__ . '/room.php';
 require __DIR__ . '/messages.php';
-
-
-

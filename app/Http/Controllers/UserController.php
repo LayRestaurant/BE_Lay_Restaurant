@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
@@ -8,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ExpertDetail;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class UserController extends Controller
 {
     protected $user;
@@ -261,7 +264,7 @@ class UserController extends Controller
         $user->phone_number = $request->input('phone_number');
         $user->gender = $request->input('gender');
         $user->profile_picture = $request->input('profile_picture');
-        $user->status = 1;
+        $user->status = 2;
         $user->save();
         return response()->json([
             'success' => true,
@@ -269,6 +272,84 @@ class UserController extends Controller
             'data' => $user,
         ], 200);
     }
+    public function updateUserProfileImage(Request $request)
+    {
+        $userInfor = $this->getUser($request);
+        $userID = $userInfor->id;
+        $user = User::find($userID);
+
+        if (empty($user)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User ID not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'profile_picture' => 'required|string|url',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 400); // Bad request
+        }
+
+        $user->profile_picture = $request->input('profile_picture');
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile image updated successfully',
+            'data' => $user,
+        ], 200);
+    }
+    public function updateUserNameAndEmail(Request $request)
+    {
+        $userInfor = $this->getUser($request);
+        $userID = $userInfor->id;
+        $user = User::find($userID);
+
+        if (empty($user)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User ID not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => 'required|string|email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 400); // Bad request
+        }
+
+        // Kiểm tra xem email đã tồn tại cho một người dùng khác chưa
+        $existingUser = User::where('email', $request->input('email'))->where('id', '!=', $userID)->first();
+        if ($existingUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email already exists in the system.',
+            ], 400); // Bad request
+        }
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Name and email updated successfully',
+            'data' => $user,
+        ], 200);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
