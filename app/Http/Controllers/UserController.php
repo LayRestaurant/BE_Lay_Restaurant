@@ -259,7 +259,7 @@ class UserController extends Controller
         }
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->address = $request->input('address ');
+        $user->address = $request->input('address');
         $user->phone_number = $request->input('phone_number');
         $user->gender = $request->input('gender');
         $user->date_of_birth = $request->input('date_of_birth');
