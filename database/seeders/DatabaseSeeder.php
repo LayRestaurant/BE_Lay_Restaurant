@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Setting;
 use Illuminate\Database\Seeder;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
@@ -33,7 +32,7 @@ class DatabaseSeeder extends Seeder
             BookingRoomsTableSeeder::class,
             BookingFoodSeeder::class,
             BookingFoodItemSeeder::class,
-            Setting::class
+            SettingSeeder::class
         ]);
 
     }
