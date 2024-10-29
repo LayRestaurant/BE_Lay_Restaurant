@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingRoomController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 // Room APIs
@@ -44,3 +45,10 @@ Route::get('/bookingRooms/room/{roomId}', [BookingRoomController::class, 'getBoo
 
 // Lấy tất cả các booking của một user cụ thể
 Route::get('/bookingRooms/user/{userId}', [BookingRoomController::class, 'getBookingsByUserId']);
+
+// Route cho quản lý cài đặt
+Route::get('/settings', [SettingController::class, 'index']);
+Route::post('/settings', [SettingController::class, 'store']);
+Route::get('/settings/{id}', [SettingController::class, 'show']);
+Route::put('/settings/{id}', [SettingController::class, 'update']);
+Route::delete('/settings/{id}', [SettingController::class, 'destroy']);
