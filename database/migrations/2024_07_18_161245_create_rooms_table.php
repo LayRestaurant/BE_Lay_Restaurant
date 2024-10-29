@@ -12,8 +12,10 @@ class CreateRoomsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
-            $table->integer('capacity');
+            $table->decimal('regularPrice', 10, 2); // Adding regular price field
+            $table->integer('maxCapacity'); // Adding maximum capacity field
+            $table->decimal('price', 10, 2)->nullable(); // Price field, optional
+            $table->integer('discount')->default(0); // Discount field, defaulting to 0
             $table->enum('status', ['available', 'booked']);
             $table->integer('star_rating')->default(0);
             $table->enum('room_type', ['single', 'double', 'multiple']);
@@ -22,6 +24,7 @@ class CreateRoomsTable extends Migration
             $table->string('image1')->nullable();
             $table->string('image2')->nullable();
             $table->string('image3')->nullable();
+            $table->string('image')->nullable(); // Adding main image field
             $table->timestamps();
         });
     }
