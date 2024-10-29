@@ -10,7 +10,7 @@ class RoomController extends Controller
     // Lấy tất cả phòng với phân trang
     public function index()
     {
-        $rooms = Room::paginate(8);
+        $rooms = Room::paginate(15);
         return response()->json($rooms);
     }
     // Lọc phòng theo giá và loại phòng
